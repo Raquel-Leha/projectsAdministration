@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const ProjectSchema = new mongoose.Schema(
+const PostSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       
     },
-    description: {
+    body: {
       type: String,
     },
   },
@@ -15,4 +15,4 @@ const ProjectSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model('Project', ProjectSchema);
+export default mongoose.model('Post', PostSchema);

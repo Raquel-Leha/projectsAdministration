@@ -1,73 +1,73 @@
-import Project from "../models/Project.js";
-import Task from "../models/Task.js"
+import Post from "../models/Post.js";
+import Comment from "../models/Comment.js"
 
 export const resolvers = {
   Query: {
-    projects: async () => await Project.find(),
-    project: async (_, {_id}) => await Project.findById(_id),
-    tasks: async () => await Task.find(),
-    task: async (_, {_id}) => await Task.findById(_id)
+    posts: async () => await Post.find(),
+    post: async (_, {_id}) => await Post.findById(_id),
+    comments: async () => await Comment.find(),
+    comment: async (_, {_id}) => await Comment.findById(_id)
   },
   Mutation: {
-    createProject: async (_, { name, description }) => {
-      const project = new Project({
-        name,
-        description,
+    createPost: async (_, { title, body }) => {
+      const post = new Post({
+        title,
+        body,
       });
-      const savedProject = await project.save();
-      return savedProject;
+      const savedPost = await post.save();
+      return savedPost;
     },
 
-    createTask: async (_, {title, projectId}) => {
+    createComment: async (_, {comment, postId}) => {
 
-        const projectFound = await Project.findById(projectId);
-        if(!projectFound) throw new Error ('Proyecto no encontrado');
+        const postFound = await Post.findById(postId);
+        if(!postFound) throw new Error ('Post no encontrado');
 
-        const task = new Task({
-            title,
-            projectId,
+        const comment1 = new Comment({
+            comment,
+            postId,
         });
-        const taskSaved = await task.save();
-        return taskSaved;
+        const commentSaved = await comment1.save();
+        return commentSaved;
 
     },
 
-    deleteProject: async (_, {_id}) => {
-        const deletedProject = await Project.findByIdAndDelete(_id);
-        if(!deletedProject) throw new Error ('Proyecto no encontrado');
-        await Task.deleteMany({projectId: deletedProject._id});
-        return deletedProject;
+    deletePost: async (_, {_id}) => {
+        const deletedPost = await Post.findByIdAndDelete(_id);
+        if(!deletedPost) throw new Error ('Post no encontrado');
+        await Comment.deleteMany({postId: deletedPost._id});
+        return deletedPost;
     },
 
-    deleteTask: async (_, {_id}) => {
-        const deletedTask = await Task.findByIdAndDelete(_id);
-        if(!deletedTask) throw new Error ('Tarea no encontrada');
-        return deletedTask;
+    deleteComment: async (_, {_id}) => {
+        const deletedComment = await Comment.findByIdAndDelete(_id);
+        if(!deletedComment) throw new Error ('Comentario no encontrado');
+        return deletedComment;
     },
     
-    updateProject: async(_,args) => {
-        const updatedProject = await Project.findByIdAndUpdate(args._id, args, {
+    updatePost: async(_,args) => {
+        const updatedPost = await Post.findByIdAndUpdate(args._id, args, {
             new: true,
         });
-        if(!updatedProject) throw new Error('Project not found');
-        return updatedProject;
+        if(!updatedPost) throw new Error('Post not found');
+        return updatedPost;
     },
 
-    updateTask: async (_, args) => {
-        const updatedTask = await Task.findByIdAndUpdate(args._id, args, {
+    updateComment: async (_, args) => {
+        const updatedComment = await Comment.findByIdAndUpdate(args._id, args, {
             new: true,
         });
-        if(!updatedTask) throw new Error('Task not found');
-        return updatedTask;
+        if(!updatedComment) throw new Error('Comment not found');
+        return updatedComment;
     }
   },
-  Project: {
-    tasks: async (parent) => {
-      return await Task.find({projectId: parent._id});
+  Post: {
+    comments: async (parent) => {
+      return await Comment.find({postId: parent._id});
     },
   },
-  Task: {
-    project: async (parent) => await Project.findById(parent.projectId)
+  Comment: {
+    post: async (parent) => await Post.findById(parent.postId)
   }
 
 };

@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
-const taskSchema = new mongoose.Schema({
-    title: {
+const CommentSchema = new mongoose.Schema({
+    comment: {
         type: String,
         required: true,
+    
     },
-    projectId: {
+    postId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Project",
+        ref: "Post",
         required: true,
     },
 },
@@ -15,4 +16,4 @@ const taskSchema = new mongoose.Schema({
     timestamps: true,
 })
 
-export default mongoose.model("Task", taskSchema);
+export default mongoose.model("Comment", CommentSchema);
