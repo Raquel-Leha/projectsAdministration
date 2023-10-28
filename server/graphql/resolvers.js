@@ -9,12 +9,14 @@ export const resolvers = {
     comment: async (_, {_id}) => await Comment.findById(_id)
   },
   Mutation: {
-    createPost: async (_, { title, body }) => {
+    createPost: async (_, { image, title, body }) => {
       const post = new Post({
+        image,
         title,
         body,
       });
       const savedPost = await post.save();
+      console.log(savedPost);
       return savedPost;
     },
 
